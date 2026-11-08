@@ -1,6 +1,6 @@
 # Schematic Browser
 
-A client-side Fabric mod project targeting Minecraft Java 1.21.11. Press **O** to open the browser. It loads schematic listings from user-configured JSON catalog feeds and saves accepted files to `<minecraft game directory>/schematics/`.
+A client-side Fabric mod project targeting Minecraft Java 1.21.11. Press **O** to open its in-game schematic library. Search filters the catalog listings already loaded; **Refresh catalogs** loads the JSON feeds configured at `config/schematicbrowser/catalogs.json`. Downloads are saved to `<minecraft game directory>/schematics/`.
 
 ## Build
 
@@ -37,10 +37,14 @@ A feed is a JSON array of entries:
 ]
 ```
 
-Every feed URL, download URL, and thumbnail URL must use HTTPS and a hostname listed in that feed's `allowedHosts`. Redirects are disabled. The catalog UI currently shows that a thumbnail URL exists, but does not yet render the remote image. Sites without a documented public feed/API need a permitted adapter or their operator's cooperation; this mod does not bypass login, anti-bot controls, or access restrictions.
+Every feed URL, download URL, and thumbnail URL must use HTTPS and a hostname listed in that feed's `allowedHosts`. Redirects are disabled. Thumbnail URLs are currently indicated in listings but their images are not yet rendered. Sites need to permit machine-readable feeds; this mod does not bypass login, anti-bot controls, or access restrictions.
+
+## Building schematics
+
+The current project downloads schematic files but does **not** parse or place them. An optional automatic builder needs a schematic-format parser and careful placement controls. Any future builder should be explicitly opt-in and paced for use in single-player or on servers where automation is allowed. It will not disguise automation or attempt to evade server protections.
 
 ## File safety
 
-This is **not antivirus** and cannot guarantee that a schematic is safe. The downloader does apply basic defensive checks: HTTPS and allowlisted hosts, redirects disabled, 50 MiB maximum, `.schem`/`.schematic` naming, an NBT/gzip-like header check, filename sanitization, and optional SHA-256 verification when the feed provides a checksum. Files are saved as data and never executed by this mod. Only download schematics from sources you trust, and keep Minecraft and schematic-reading mods updated.
+This is **not antivirus** and cannot guarantee that a schematic is safe. The downloader applies basic defensive checks: HTTPS and allowlisted hosts, redirects disabled, 50 MiB maximum, filename sanitization, a schematic-like header check, and optional SHA-256 verification when the feed provides a checksum. Files are saved as data and never executed by this mod. Only download schematics from sources you trust, and keep Minecraft and schematic-reading mods updated.
 
 The checks are deliberately conservative and may reject valid schematic variants. No third-party site's live API is bundled; users configure feeds for sites that explicitly permit machine-readable access.
