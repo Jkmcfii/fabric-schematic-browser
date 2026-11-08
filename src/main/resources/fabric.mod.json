@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "schematicbrowser",
+  "version": "${version}",
+  "name": "Schematic Browser",
+  "description": "Search trusted schematic catalog feeds and download schematic files in-game.",
+  "authors": ["Jkmcfii"],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["dev.jkmcfii.schematicbrowser.SchematicBrowserClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.18.1",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
