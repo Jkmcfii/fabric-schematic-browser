@@ -30,8 +30,8 @@ final class BrowserScreen extends Screen {
         int contentLeft = left + 14;
         int contentWidth = panelWidth - 28;
 
-        searchBox = new EditBox(font, contentLeft, 39, contentWidth - 76, 22,
-                Component.literal("Search schematics"));
+        searchBox = new EditBox(font, contentLeft, 39, contentWidth - 76,
+                22, Component.literal("Search schematics"));
         searchBox.setHint(Component.literal("Name, source, or description"));
         addRenderableWidget(searchBox);
         addRenderableWidget(Button.builder(Component.literal("Search"), button -> {
@@ -40,12 +40,15 @@ final class BrowserScreen extends Screen {
             message = filtered.size() + " result(s) in loaded catalogs.";
         }).bounds(contentLeft + contentWidth - 70, 39, 70, 22).build());
 
-        addRenderableWidget(Button.builder(Component.literal("Refresh catalogs"), button -> {
+        addRenderableWidget(Button.builder(Component.literal("Refresh"), button -> {
             CatalogManager.refresh();
-            message = "Searching configured catalogs...";
-        }).bounds(contentLeft, 68, 140, 20).build());
+            message = "Refreshing configured catalogs...";
+        }).bounds(contentLeft, 68, 96, 20).build());
+        addRenderableWidget(Button.builder(Component.literal("Add catalog"), button ->
+                minecraft.setScreen(new CatalogSetupScreen(this)))
+                .bounds(contentLeft + 102, 68, 96, 20).build());
         addRenderableWidget(Button.builder(Component.literal("Close"), button -> onClose())
-                .bounds(contentLeft + contentWidth - 90, 68, 90, 20).build());
+                .bounds(contentLeft + contentWidth - 76, 68, 76, 20).build());
 
         int listTop = 100;
         int rowHeight = 48;
@@ -102,7 +105,6 @@ final class BrowserScreen extends Screen {
     public void tick() {
         super.tick();
         reloadFiltered();
-        message = CatalogManager.status();
     }
 
     @Override
@@ -135,9 +137,10 @@ final class BrowserScreen extends Screen {
         }
         int page = filtered.isEmpty() ? 0 : firstVisible / PAGE_SIZE + 1;
         int pages = Math.max(1, (filtered.size() + PAGE_SIZE - 1) / PAGE_SIZE);
+        graphics.drawCenteredString(font, trim(message, 90), width / 2, height - 69, 0xFFFFD98A);
+        graphics.drawCenteredString(font, trim(CatalogManager.status(), 90), width / 2, height - 56, 0xFFE1E9E5);
         graphics.drawCenteredString(font, "Page " + page + " / " + pages + "  ·  " + filtered.size() + " results",
                 width / 2, height - 43, 0xFFE1E9E5);
-        graphics.drawCenteredString(font, trim(message, 90), width / 2, height - 56, 0xFFFFD98A);
         super.render(graphics, mouseX, mouseY, delta);
     }
 
